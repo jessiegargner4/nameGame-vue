@@ -1,0 +1,36 @@
+@import './base.css';
+
+#app {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+@media (hover: hover) {
+  a:hover {
+    background-color: hsla(201, 93%, 57%, 0.2);
+  }
+}
+
+.button {
+  display: inline-block;
+  padding: 0.5em 1em;
+  margin: 0.5em;
+  border-radius: 0.50em;
+  background-color: #3e6181;
+  color: #fff;
+  text-align: center;
+  line-height: 40px;
+  font-weight: bold;
+  width: 359px;
+  height: 56px;
+}
+
+@media (min-width: 1024px) {
+  body {
+    display: flex;
+    place-items: center;
+    height: 100vh; /* Use 100vh to cover the full viewport height */
+    margin: 0;
+    padding: 0;
+  }
+}

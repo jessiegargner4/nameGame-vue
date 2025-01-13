@@ -4,6 +4,9 @@ import { useNameGameStore } from '@/stores/nameGame';
 
 const store = useNameGameStore();
 
+
+store.getOptions();
+
 defineProps<{
  
 }>()
@@ -28,7 +31,7 @@ defineProps<{
                 <img :src="shuffled.headshot.url" alt="employee photo" />   
             </div>
     </div>
-    <button class="button">Continue</button>
+    <button class="button" @click=store.getOptions()>Continue</button>
     <!-- <Link to="/EndGamePage" class="button">Continue</Link> -->
   </div>
 </template>

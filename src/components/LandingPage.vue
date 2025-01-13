@@ -5,6 +5,7 @@ import GetNameModal from './GetNameModal.vue';
 import { useUserNameStore } from '@/stores/userName';
 
 const userNameStore = useUserNameStore();
+const store = useNameGameStore();
 
 defineProps<{
   userName?: string;
@@ -17,7 +18,7 @@ defineProps<{
     <img src="../assets/gameLogo.jpg" alt="game logo" />
     <h1>Try matching the WillowTree employee to their photo.</h1>
     <GetNameModal v-if="!userName"/>
-    <router-link v-if="userNameStore.isValid" to="GamePlayPage" class="button">Play!</router-link>
+    <router-link v-if="userNameStore.isValid" to="GamePlayPage" class="button" @click=store.startNewGame>Play!</router-link>
   </div>
 </template>
 

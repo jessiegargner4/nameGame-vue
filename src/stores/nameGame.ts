@@ -34,7 +34,7 @@ export const useNameGameStore = defineStore("nameGame", () => {
     .catch((error) => {
       console.error("Error fetching employees:", error);
     });
-
+  
   const startNewGame = () => {
     shuffled.value = employees.value.slice().sort(() => Math.random() - 0.5);
     winCount.value = 0;
@@ -42,14 +42,16 @@ export const useNameGameStore = defineStore("nameGame", () => {
     elapsedTime.value = 0;
   };
 
+  const displayedEmployees = ref<Employee[]>([]);
   const getOptions = (numEmployees = 6) => {
     questionStartTime.value = Date.now();
-    return shuffled.value.splice(0, numEmployees); //starting at index 0 removes 6 elements not removing elements from indices 0 to 6
+    return displayedEmployees.value = shuffled.value.splice(0, numEmployees); //starting at index 0 removes 6 elements not removing elements from indices 0 to 6
   };
 
-  const displayedEmployees = computed(() => getOptions());
-  const randomIndex = Math.floor(Math.random() * displayedEmployees.value.length);
-  const correctEmployee = computed(() => displayedEmployees.value[randomIndex]);
+  // const randomIndex = Math.floor(Math.random() * displayedEmployees.value.length);
+  const correctEmployee = computed(() => {
+    return displayedEmployees.value[Math.floor(Math.random() * displayedEmployees.value.length)];
+  });
 
   return {
     winCount,

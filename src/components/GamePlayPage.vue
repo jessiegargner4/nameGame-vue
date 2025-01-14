@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 import NavBar from './NavBar.vue';
 import { useNameGameStore } from '@/stores/nameGame';
 
 const store = useNameGameStore();
-
 
 store.getOptions();
 
@@ -27,12 +27,12 @@ defineProps<{
        {{store.correctEmployee.firstName}} {{store.correctEmployee.lastName}}
     </h2>
     <div class="game-container">
-        <div class="pic-container" v-for="shuffled in store.displayedEmployees" :key="shuffled.id">
-                <img :src="shuffled.headshot.url" alt="employee photo" />   
-            </div>
+        <div class="pic-container" v-for="(employee, index) in store.displayedEmployees" :key="employee.id">
+            <img :src="employee.headshot.url" @click="store.chosenEmployee(employee, index)" alt="employee photo" />
+        </div>
     </div>
-    <button class="button" @click=store.getOptions()>Continue</button>
-    <!-- <Link to="/EndGamePage" class="button">Continue</Link> -->
+    <button class="button" v-if="store.answerCount < 5"@click=store.getOptions()>Continue</button>
+    <router-link to="/EndGamePage" class="button" v-if="store.answerCount >= 5">Continue</router-link>
   </div>
 </template>
 

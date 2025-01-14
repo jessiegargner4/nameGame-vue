@@ -53,6 +53,15 @@ export const useNameGameStore = defineStore("nameGame", () => {
     return displayedEmployees.value[Math.floor(Math.random() * displayedEmployees.value.length)];
   });
 
+  // const chosen = ref<Employee[]>([]);
+  const chosenEmployee = (chosen: Employee, index: number): void => {
+    if (correctEmployee.value.id === chosen.id) {
+      answered(true);
+    } else {
+      answered(false);
+    }
+  };
+
   return {
     winCount,
     answered,
@@ -61,6 +70,7 @@ export const useNameGameStore = defineStore("nameGame", () => {
     getOptions,
     startNewGame,
     correctEmployee,
+    chosenEmployee,
     displayedEmployees,
   };
 });

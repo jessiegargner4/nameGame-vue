@@ -9,6 +9,8 @@ interface Employee {
     url: string;
     type: string;
   };
+  isCorrect?: boolean;
+  isChosen?: boolean;
 }
 
 export const useNameGameStore = defineStore("nameGame", () => {
@@ -16,6 +18,7 @@ export const useNameGameStore = defineStore("nameGame", () => {
   const answerCount = ref(0);
   const questionStartTime = ref(0);
   const elapsedTime = ref(0);
+  const disabled = ref(true);
   const answered = (correct = false) => {
     if (correct) {
       winCount.value++;
@@ -23,6 +26,16 @@ export const useNameGameStore = defineStore("nameGame", () => {
     answerCount.value++;
     elapsedTime.value = Date.now() - questionStartTime.value;
   };
+
+  const winRate = computed(() => {
+    console.log(winRate);
+    return answerCount.value === 0 ? 0 : winCount.value / answerCount.value * 100;
+  });
+  
+  const failRate = computed(() => {
+    console.log(failRate);
+    return answerCount.value === 0 ? 0 : (answerCount.value - winCount.value) / answerCount.value * 100;
+  });
 
   const employees = ref<Employee[]>([]);
   const shuffled = ref<Employee[]>([]);
@@ -45,17 +58,23 @@ export const useNameGameStore = defineStore("nameGame", () => {
   const displayedEmployees = ref<Employee[]>([]);
   const getOptions = (numEmployees = 6) => {
     questionStartTime.value = Date.now();
-    return displayedEmployees.value = shuffled.value.splice(0, numEmployees); //starting at index 0 removes 6 elements not removing elements from indices 0 to 6
+    displayedEmployees.value = shuffled.value.splice(0, numEmployees);
+    displayedEmployees.value.forEach(employee => {
+      employee.isCorrect = false;
+      employee.isChosen = false;
+    });
   };
 
-  // const randomIndex = Math.floor(Math.random() * displayedEmployees.value.length);
   const correctEmployee = computed(() => {
     return displayedEmployees.value[Math.floor(Math.random() * displayedEmployees.value.length)];
   });
 
-  // const chosen = ref<Employee[]>([]);
-  const chosenEmployee = (chosen: Employee, index: number): void => {
-    if (correctEmployee.value.id === chosen.id) {
+  const chosenEmployee = (employee: Employee) => {
+    displayedEmployees.value.forEach(emp => {
+      emp.isChosen = true;
+      emp.isCorrect = emp.id === correctEmployee.value.id;
+    });
+    if (correctEmployee.value.id === employee.id) {
       answered(true);
     } else {
       answered(false);
@@ -72,5 +91,8 @@ export const useNameGameStore = defineStore("nameGame", () => {
     correctEmployee,
     chosenEmployee,
     displayedEmployees,
+    disabled,
+    winRate,
+    failRate,
   };
 });

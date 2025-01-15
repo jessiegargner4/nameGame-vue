@@ -19,7 +19,6 @@ defineProps<{
 </script>
 
 <template>
-
   <div class="container">
     <NavBar/>
     <h1>Try matching the WillowTree employee to their photo.</h1>
@@ -27,11 +26,16 @@ defineProps<{
        {{store.correctEmployee.firstName}} {{store.correctEmployee.lastName}}
     </h2>
     <div class="game-container">
-        <div class="pic-container" v-for="(employee, index) in store.displayedEmployees" :key="employee.id">
-            <img :src="employee.headshot.url" @click="store.chosenEmployee(employee, index)" alt="employee photo" />
-        </div>
+      <div 
+        class="pic-container" 
+        v-for="employee in store.displayedEmployees" 
+        :key="employee.id"
+        :class="{ correct: employee.isChosen && employee.isCorrect, incorrect: employee.isChosen && !employee.isCorrect, inactive: employee.isChosen && employee.id !== store.correctEmployee.id }"
+      >
+        <img :src="employee.headshot.url" @click="store.chosenEmployee(employee)" alt="employee photo" />
+      </div>
     </div>
-    <button class="button" v-if="store.answerCount < 5"@click=store.getOptions()>Continue</button>
+    <button class="button"v-if="store.answerCount < 5" @click="store.getOptions()">Continue</button>
     <router-link to="/EndGamePage" class="button" v-if="store.answerCount >= 5">Continue</router-link>
   </div>
 </template>
@@ -73,6 +77,23 @@ defineProps<{
   height: auto;
   object-fit: cover;
 }
+
+.inactive {
+  opacity: 0.5;
+}
+
+.correct {
+  border: 2px solid green;
+}
+
+.incorrect {
+  border: 2px solid red;
+  background: #ff3a3099;
+  background-image: url('assets/x.png');
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 h1 {
     font: helvetica;
     color: #223547;

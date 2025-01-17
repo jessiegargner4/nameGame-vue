@@ -57,6 +57,8 @@ export const useNameGameStore = defineStore("nameGame", () => {
   const getOptions = (numEmployees = 6) => {
     questionStartTime.value = Date.now();
     displayedEmployees.value = shuffled.value.splice(0, numEmployees);
+    selected.value = new Array(numEmployees).fill(false);//cursor
+    isDisabled.value = true;
   };
 
   const correctEmployee = computed(() => {
@@ -68,24 +70,17 @@ export const useNameGameStore = defineStore("nameGame", () => {
       if (!selected.value.some(select => select)) {
         selected.value[index] = true;
         selected.value = [...selected.value];
-        // isDisabled.value = false;
+        if (correctEmployee.value.id === employee.id) {
+          answered(true);
+        } else {
+          answered(false);
+        }
+        isDisabled.value = false;
       }
-      if (correctEmployee.value.id === employee.id) {
-        answered(true);
-      } else {
-        answered(false);
-      }
-      // isDisabled.value = true;
-      return selected.value; // && isDisabled.value;
     };
 
     const isButtonDisabled = computed(() => {
-      if(selected.value.some(select => select)) {
-        
-        return isDisabled.value = false;
-      }
-      console.log(isDisabled);
-      return isDisabled.value = true;
+      return !selected.value.some(select => select);//cursor
     });
 
 

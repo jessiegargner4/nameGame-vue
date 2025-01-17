@@ -10,6 +10,13 @@
     background-color: hsla(201, 93%, 57%, 0.2);
   }
 }
+button:hover {
+  border-color: #f3f3f7;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
 
 .button {
   display: inline-block;

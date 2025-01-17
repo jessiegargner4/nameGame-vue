@@ -24,7 +24,7 @@ store.getOptions();
         :class="{
           correct:  store.selected[index] && employee.id === store.correctEmployee.id,
           incorrect: store.selected[index] && employee.id !== store.correctEmployee.id,
-          inactive: !store.selected[index] && !store.isDisabled,
+          inactive: !store.selected[index] && store.selected.some(s => s)
         }"
       >
         <img
@@ -36,7 +36,7 @@ store.getOptions();
     </div>
     <button
       :disabled="store.isButtonDisabled"
-      style="{{ color: store.isDisabled ? '#737272' : '#15659D' }}"
+      :style="{ color: store.isDisabled ? '#808080' : '#ffffff' }"
       class="button"
       v-if="store.answerCount < 5"
       @click="store.getOptions()"
@@ -78,6 +78,7 @@ store.getOptions();
   align-items: center;
   width: 350px;
   height: 350px;
+  position: relative; /*cursor */
 }
 
 .pic-container img {
@@ -90,16 +91,32 @@ store.getOptions();
   opacity: 0.5;
 }
 
-.correct {
-  border: 2px solid green;
+.correct::after { /*cursor */
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 255, 0, 0.3);
+  background-image: url('@/assets/check.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100px;
 }
 
-.incorrect {
-  border: 2px solid red;
-  /* background: #ff3a3099;
-  background-image: url("../assets/x.png");
+.incorrect::after { /*cursor */
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 0, 0, 0.3);
+  background-image: url('@/assets/x.png');
   background-position: center;
-  background-repeat: no-repeat; */
+  background-repeat: no-repeat;
+  background-size: 100px;
 }
 
 h1 {

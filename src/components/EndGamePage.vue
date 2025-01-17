@@ -11,15 +11,15 @@ store.getOptions();
 </script>
 
 <template>
-  <div className="ontainer">
-    <div className="endScreenBlue">
+  <div class="container">
+    <div class="endScreenBlue">
       <img src="../assets/title.png" alt="Title"/>     
-        <img src="../assets/endGame.svg" alt="FinalImage"/> 
-        <p className="endScreenText">Congratulations {{userNameStore.name}}, <br></br> you scored {{store.winCount}} / {{5}}!</p>        
-        <router-link className="button" to="/">Return to home </router-link>
+        <img src="../assets/endGame.svg" class="spacedImage" alt="EndGameImage"/> 
+        <p class="endScreenText">Congratulations {{userNameStore.name}}, <br></br> you scored {{store.winCount}} / {{store.answerCount}}!</p>        
+        <router-link class="button" to="/">Return to home </router-link>
       </div>
     
-    <div className="endScreenScores">
+    <div class="endScreenScores">
         <p>
             {{store.winRate}}%
               <br></br>
@@ -89,6 +89,10 @@ color: #FFFFFF;
   padding: 0;
   margin: 0;
   background-color: #223547;
+}
+
+.spacedImage {
+  margin-top: 20px; /* Adjust the value as needed */
 }
 
 </style>

@@ -9,8 +9,6 @@ interface Employee {
     url: string;
     type: string;
   };
-  isCorrect?: boolean;
-  isChosen?: boolean;
 }
 
 export const useNameGameStore = defineStore("nameGame", () => {
@@ -18,7 +16,7 @@ export const useNameGameStore = defineStore("nameGame", () => {
   const answerCount = ref(0);
   const questionStartTime = ref(0);
   const elapsedTime = ref(0);
-  const disabled = ref(true);
+  const isDisabled = ref(true);
   const answered = (correct = false) => {
     if (correct) {
       winCount.value++;
@@ -59,27 +57,37 @@ export const useNameGameStore = defineStore("nameGame", () => {
   const getOptions = (numEmployees = 6) => {
     questionStartTime.value = Date.now();
     displayedEmployees.value = shuffled.value.splice(0, numEmployees);
-    displayedEmployees.value.forEach(employee => {
-      employee.isCorrect = false;
-      employee.isChosen = false;
-    });
   };
 
   const correctEmployee = computed(() => {
     return displayedEmployees.value[Math.floor(Math.random() * displayedEmployees.value.length)];
   });
 
-  const chosenEmployee = (employee: Employee) => {
-    displayedEmployees.value.forEach(emp => {
-      emp.isChosen = true;
-      emp.isCorrect = emp.id === correctEmployee.value.id;
+  const selected = ref<boolean[]>([false, false, false, false, false, false]);
+    const handleSelected = (employee: Employee, index: number) => {
+      if (!selected.value.some(select => select)) {
+        selected.value[index] = true;
+        selected.value = [...selected.value];
+        // isDisabled.value = false;
+      }
+      if (correctEmployee.value.id === employee.id) {
+        answered(true);
+      } else {
+        answered(false);
+      }
+      // isDisabled.value = true;
+      return selected.value; // && isDisabled.value;
+    };
+
+    const isButtonDisabled = computed(() => {
+      if(selected.value.some(select => select)) {
+        
+        return isDisabled.value = false;
+      }
+      console.log(isDisabled);
+      return isDisabled.value = true;
     });
-    if (correctEmployee.value.id === employee.id) {
-      answered(true);
-    } else {
-      answered(false);
-    }
-  };
+
 
   return {
     winCount,
@@ -89,10 +97,13 @@ export const useNameGameStore = defineStore("nameGame", () => {
     getOptions,
     startNewGame,
     correctEmployee,
-    chosenEmployee,
+    // chosenEmployee,
+    handleSelected,
     displayedEmployees,
-    disabled,
+    isButtonDisabled,
+    isDisabled,
     winRate,
     failRate,
+    selected,
   };
 });

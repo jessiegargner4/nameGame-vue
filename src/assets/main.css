@@ -1,37 +1,5 @@
 @import './base.css';
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-}
-
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(201, 93%, 57%, 0.2);
-  }
-}
-button:hover {
-  border-color: #f3f3f7;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-.button {
-  display: inline-block;
-  padding: 0.5em 1em;
-  margin: 0.5em;
-  border-radius: 0.50em;
-  background-color: #3e6181;
-  color: #fff;
-  text-align: center;
-  line-height: 40px;
-  font-weight: bold;
-  width: 359px;
-  height: 56px;
-}
-
 @media (min-width: 1024px) {
   body {
     display: flex;
@@ -40,4 +8,35 @@ button:focus-visible {
     margin: 0;
     padding: 0;
   }
+}
+
+#app {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.button {
+  display: inline-block;
+  width: 359px;
+  height: 56px;
+  padding: 0.5em 1em;
+  margin: 0.5em;
+  border-radius: 0.50em; /*for roundyness*/
+  border: 0;
+  background-color: #3e6181;
+  color: #fff;
+  text-align: center;
+  line-height: 40px;
+  font-weight: bold;
+}
+.button:hover {
+  background-color: #788ea3;
+}
+.button:focus,
+.button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+.button:disabled {
+  background-color: #92aac1;
+  color: #808080;
 }

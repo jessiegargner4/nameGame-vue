@@ -5,7 +5,6 @@ import { useNameGameStore } from "@/stores/nameGame";
 
 const store = useNameGameStore();
 
-
 store.getOptions();
 </script>
 
@@ -22,9 +21,13 @@ store.getOptions();
         v-for="(employee, index) in store.displayedEmployees"
         :key="employee.id"
         :class="{
-          correct:  store.selected[index] && employee.id === store.correctEmployee.id,
-          incorrect: store.selected[index] && employee.id !== store.correctEmployee.id,
-          inactive: !store.selected[index] && store.selected.some(s => s)
+          correct:
+            store.selected[index] && employee.id === store.correctEmployee.id,
+          incorrect:
+            store.selected[index] && employee.id !== store.correctEmployee.id,
+          inactive:
+            !store.selected[index] &&
+            store.selected.some((selected) => selected), // cursor
         }"
       >
         <img
@@ -36,21 +39,19 @@ store.getOptions();
     </div>
     <button
       :disabled="store.isButtonDisabled"
-      :style="{ color: store.isDisabled ? '#808080' : '#ffffff' }"
       class="button"
       v-if="store.answerCount < 5"
       @click="store.getOptions()"
     >
       Continue
     </button>
-    <router-link to="/EndGamePage" class="button" v-if="store.answerCount >= 5"
-      >Continue</router-link
-    >
+    <router-link to="/EndGamePage" class="button" v-else>
+      Continue
+    </router-link>
   </div>
 </template>
 
 <style scoped>
-
 .container {
   display: flex;
   flex-direction: column;
@@ -83,7 +84,7 @@ store.getOptions();
 
 .pic-container img {
   width: 100%;
-  height: auto;
+  height: 100%;
   object-fit: cover;
 }
 
@@ -91,29 +92,31 @@ store.getOptions();
   opacity: 0.5;
 }
 
-.correct::after { /*cursor */
-  content: '';
+.correct::after {
+  /*cursor */
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   background: rgba(0, 255, 0, 0.3);
-  background-image: url('@/assets/check.png');
+  background-image: url("@/assets/check.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: 100px;
 }
 
-.incorrect::after { /*cursor */
-  content: '';
+.incorrect::after {
+  /*cursor */
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   background: rgba(255, 0, 0, 0.3);
-  background-image: url('@/assets/x.png');
+  background-image: url("@/assets/x.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: 100px;

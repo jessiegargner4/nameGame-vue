@@ -31,7 +31,7 @@ store.getOptions();
             Incorrect Selections
         </p>
         <p>
-            {{((store.elapsedTime / 5 )/ 100).toFixed(2)}} Sec
+            {{((store.totatlElapsedTime / 5 )/ 1000).toFixed(2)}} Sec
             <br></br>
             Avg Selection Time
         </p>

@@ -17,22 +17,28 @@ export const useNameGameStore = defineStore("nameGame", () => {
   const questionStartTime = ref(0);
   const elapsedTime = ref(0);
   const isDisabled = ref(true);
+  const totatlElapsedTime = ref(0);
   const answered = (correct = false) => {
     if (correct) {
       winCount.value++;
     }
     answerCount.value++;
     elapsedTime.value = Date.now() - questionStartTime.value;
+    totatlElapsedTime.value += elapsedTime.value;
   };
 
   const winRate = computed(() => {
     console.log(winRate);
-    return answerCount.value === 0 ? 0 : winCount.value / answerCount.value * 100;
+    return answerCount.value === 0
+      ? 0
+      : (winCount.value / answerCount.value) * 100;
   });
-  
+
   const failRate = computed(() => {
     console.log(failRate);
-    return answerCount.value === 0 ? 0 : (answerCount.value - winCount.value) / answerCount.value * 100;
+    return answerCount.value === 0
+      ? 0
+      : ((answerCount.value - winCount.value) / answerCount.value) * 100;
   });
 
   const employees = ref<Employee[]>([]);
@@ -45,9 +51,12 @@ export const useNameGameStore = defineStore("nameGame", () => {
     .catch((error) => {
       console.error("Error fetching employees:", error);
     });
-  
+
   const startNewGame = () => {
-    shuffled.value = employees.value.slice().sort(() => Math.random() - 0.5);
+    shuffled.value = employees.value
+    .filter(employee => employee.headshot.url)
+    .slice()
+    .sort(() => Math.random() - 0.5);
     winCount.value = 0;
     answerCount.value = 0;
     elapsedTime.value = 0;
@@ -57,32 +66,33 @@ export const useNameGameStore = defineStore("nameGame", () => {
   const getOptions = (numEmployees = 6) => {
     questionStartTime.value = Date.now();
     displayedEmployees.value = shuffled.value.splice(0, numEmployees);
-    selected.value = new Array(numEmployees).fill(false);//cursor
+    selected.value = new Array(numEmployees).fill(false); //cursor
     isDisabled.value = true;
   };
 
   const correctEmployee = computed(() => {
-    return displayedEmployees.value[Math.floor(Math.random() * displayedEmployees.value.length)];
+    return displayedEmployees.value[
+      Math.floor(Math.random() * displayedEmployees.value.length)
+    ];
   });
 
   const selected = ref<boolean[]>([false, false, false, false, false, false]);
-    const handleSelected = (employee: Employee, index: number) => {
-      if (!selected.value.some(select => select)) {
-        selected.value[index] = true;
-        selected.value = [...selected.value];
-        if (correctEmployee.value.id === employee.id) {
-          answered(true);
-        } else {
-          answered(false);
-        }
-        isDisabled.value = false;
+  const handleSelected = (employee: Employee, index: number) => {
+    if (!selected.value.some((select) => select)) {
+      selected.value[index] = true;
+      selected.value = [...selected.value];
+      if (correctEmployee.value.id === employee.id) {
+        answered(true);
+      } else {
+        answered(false);
       }
-    };
+      isDisabled.value = false;
+    }
+  };
 
-    const isButtonDisabled = computed(() => {
-      return !selected.value.some(select => select);//cursor
-    });
-
+  const isButtonDisabled = computed(() => {
+    return !selected.value.some((select) => select); //cursor
+  });
 
   return {
     winCount,
@@ -92,7 +102,6 @@ export const useNameGameStore = defineStore("nameGame", () => {
     getOptions,
     startNewGame,
     correctEmployee,
-    // chosenEmployee,
     handleSelected,
     displayedEmployees,
     isButtonDisabled,
@@ -100,5 +109,6 @@ export const useNameGameStore = defineStore("nameGame", () => {
     winRate,
     failRate,
     selected,
+    totatlElapsedTime,
   };
 });
